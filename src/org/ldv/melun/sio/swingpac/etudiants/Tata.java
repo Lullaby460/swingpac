@@ -4,13 +4,13 @@ import java.awt.Color;
 
 import org.ldv.melun.sio.swingpac.Bidule;
 
-public class Titi extends Bidule {
+public class Tata extends Bidule {
 
   private int nbDeplacements;
 
-  public Titi() {
-    super("Mario");
-    setBackground(Color.RED);
+  public Tata() {
+    super("Warrio");
+    setBackground(Color.MAGENTA);
     nbDeplacements = 0;
   }
 
