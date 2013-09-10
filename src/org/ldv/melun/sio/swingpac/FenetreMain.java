@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
 
+import javax.management.timer.Timer;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -143,7 +145,7 @@ public class FenetreMain extends JFrame implements ActionListener {
     if (!"".equals(erreurs))
       JOptionPane.showMessageDialog(null, erreurs);
   }
-
+  
   /**
    * Appelé par les commandes du menu
    */
@@ -154,7 +156,7 @@ public class FenetreMain extends JFrame implements ActionListener {
       System.exit(0);
     } else if (action.equals(ACTION_GO)) {
       go();
-    }
+    } 
   }
 
 }// FentreMain
