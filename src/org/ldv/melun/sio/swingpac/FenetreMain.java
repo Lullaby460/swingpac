@@ -1,9 +1,11 @@
 package org.ldv.melun.sio.swingpac;
 
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EventObject;
@@ -15,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import org.ldv.melun.sio.swingpac.utils.PackageUtil;
 
@@ -85,22 +88,21 @@ public class FenetreMain extends JFrame implements ActionListener {
     // l'instance de cette fenêtre est à l'écoute d'une action sur ce menu
     mn.addActionListener(this);
     jeu.add(mn);
+    //
+    JMenuItem Pause = new JMenuItem("Pause", KeyEvent.VK_P);
+    Pause.setActionCommand(ACTION_PAUSE);
+    Pause.addActionListener(this);  
+    jeu.add(Pause);
+    
     menuBar.add(jeu);
-    //
-    //
-    //
-    JMenu pause = new JMenu("Pause");
-    pause.setMnemonic(KeyEvent.VK_J);
-    JMenuItem mp = new JMenuItem("Pause", KeyEvent.VK_P);
-    mp.setActionCommand(ACTION_PAUSE);
-    mp.addActionListener(this);
-    pause.add(mp);
-    menuBar.add(pause);
-    //
-    //
-    //
-    // TODO : ajouter une commande Pause qui stoppe le timer de tous les objets
-    // Bidule.
+    
+    /* KEY BINDINGS
+    component.getInputMap().put(KeyStroke.getKeyStroke("F2"),
+             "doSomething");
+    component.getActionMap().put("doSomething",
+             Pause);
+	*/
+       
 
     // on ajoute la barre de menu à la fenêtre
     setJMenuBar(menuBar);
@@ -108,8 +110,6 @@ public class FenetreMain extends JFrame implements ActionListener {
     // l'instance de cette fenêtre est à l'écoute d'une action sur ce menu
     mnItemQuitter.addActionListener(this);
 
-    // TODO : définir une taille en fonction de la taille de l'écran
-    // par exemple le 1/4 de l'écran pour des grands écrans, ou 1/2 ...
     setSize(500, 500);
     setExtendedState(Frame.MAXIMIZED_BOTH); 
 
@@ -146,6 +146,31 @@ public class FenetreMain extends JFrame implements ActionListener {
       JOptionPane.showMessageDialog(null, erreurs);
   }
   
+  private void pause () {
+	  List<Bidule> bidulesPresent = new ArrayList<Bidule>();
+	  
+	  	for (Component obj : this.getContentPane().getComponents()) {
+	  		if (obj instanceof Bidule && obj != this)
+	  			
+	  			bidulesPresent.add((Bidule) obj);
+	  	}
+	  	for (Bidule bidules : bidulesPresent){
+	  		bidules.stop();
+	  	}
+  }
+  /*private void restart () {
+	  List<Bidule> bidulesPresent = new ArrayList<Bidule>();
+	  
+	  	for (Component obj : this.getContentPane().getComponents()) {
+	  		if (obj instanceof Bidule && obj != this)
+	  			
+	  			bidulesPresent.add((Bidule) obj);
+	  	}
+	  	for (Bidule bidules : bidulesPresent){
+	  		bidules.restart();
+	  	}
+  }
+  */
   /**
    * Appelé par les commandes du menu
    */
@@ -156,7 +181,9 @@ public class FenetreMain extends JFrame implements ActionListener {
       System.exit(0);
     } else if (action.equals(ACTION_GO)) {
       go();
-    } 
+    } else if (action.equals(ACTION_PAUSE)) {
+        pause();
+    }
   }
 
 }// FentreMain

@@ -19,8 +19,6 @@ import javax.swing.Timer;
  * @date 2013-09-09
  * @author kpu (lycée Léonard de Vinci - Melun - SIO-SLAM)
  * 
- *         TODO: mémoriser le nombre d'impacts d'objet bidules réalisés (pas
- *         subis)
  *         
  *         TODO : reféfinir toString afin de remonter des informations pertinentes 
  * 
@@ -163,7 +161,7 @@ public class Bidule extends JPanel {
     else
       this.incX = 0; // punition !
   }
-
+  int compteur = 0;
   /**
    * appelé après un déplacement. Vérifie si impacts, et préviens les objets
    * touchés.
@@ -173,17 +171,29 @@ public class Bidule extends JPanel {
     List<Bidule> bidules = getCollisions();
     for (Bidule bidule : bidules) {
       if (bidule.isGoDown()
-          && bidule.getY() + bidule.getHeight() >= this.getY())
+          && bidule.getY() + bidule.getHeight() >= this.getY()){
         bidule.tuEstouchePar(this);
+      	compteur++;
+      }
       else if (bidule.isGoUp()
-          && bidule.getY() <= this.getY() + this.getHeight())
+          && bidule.getY() <= this.getY() + this.getHeight()){
         bidule.tuEstouchePar(this);
+        compteur++;
+      }
       else if (bidule.isGoRight()
-          && bidule.getX() + bidule.getWidth() >= this.getX())
+          && bidule.getX() + bidule.getWidth() >= this.getX()){
         bidule.tuEstouchePar(this);
+        compteur++;
+      }
       else if (bidule.isGoLeft()
-          && bidule.getX() <= this.getWidth() + this.getX())
+          && bidule.getX() <= this.getWidth() + this.getX()){
         bidule.tuEstouchePar(this);
+        compteur++;
+      }
+      if (compteur == 5) {
+    	  this.setBounds(getX() + incX, getY() + incY, getWidth() + 20,
+            getHeight() + 20);
+      }
     }
   }
 
@@ -195,11 +205,13 @@ public class Bidule extends JPanel {
     // le vainqueur est celui qui reste seul
     if (aloneInTheWorld()) {
       timer.stop();
-      JOptionPane.showMessageDialog(getParent(), "GAGNÉ : " + name);
+      JOptionPane.showMessageDialog(getParent(), name + " a gagné et à touché " + compteur + " fois un autre bidule!");
       getParent().remove(this);
     }
   }
-
+  
+  
+  
   /**
    * Détermine si l'objet courant est seul dans la scene
    * 
@@ -223,11 +235,7 @@ public class Bidule extends JPanel {
     // je retrécis
     this.setBounds(getX() + incX, getY() + incY, getWidth() - 1,
         getHeight() - 1);
-
-    // TODO (plus difficile) : augmenter la taille de biduleImpacteur (dans la
-    // limite de la taille initiale)
-    // si celui-ci a touché au moins 5 autres bidules
-
+    
     // en dessous d'une dimension minimale, l'objet
     // courant disparait de ce monde...
     if (getWidth() < NB_MINMAL_PIXELS_VIE || getHeight() < NB_MINMAL_PIXELS_VIE) {
