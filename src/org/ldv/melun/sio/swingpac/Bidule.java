@@ -28,6 +28,11 @@ import javax.swing.Timer;
  * 
  */
 public class Bidule extends JPanel {
+	
+  /**
+  * Compteur de collisions
+  */
+  int compteur = 0;
 
   /**
    * Objet reponsable des déclenchement d'appels (voir MoveAction)
@@ -161,7 +166,7 @@ public class Bidule extends JPanel {
     else
       this.incX = 0; // punition !
   }
-  int compteur = 0;
+  
   /**
    * appelé après un déplacement. Vérifie si impacts, et préviens les objets
    * touchés.
