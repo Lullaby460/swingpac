@@ -32,12 +32,12 @@ public class FenetreMain extends JFrame implements ActionListener {
   static final String ACTION_QUITTER = "Quitter";
 
   static final String ACTION_GO = "Go";
-  
-  static final String ACTION_PAUSE = "Pause";
 
   private static final String PACKAGE_BIDULES = "org.ldv.melun.sio.swingpac.etudiants";
 
-  private static final int TAILLE_BIDULE = 30;
+  private static final int TAILLE_BIDULE = 20;
+  
+  private final String ACTION_PAUSE = "Pause";
 
   // constructeur
   public FenetreMain() {
@@ -89,10 +89,11 @@ public class FenetreMain extends JFrame implements ActionListener {
     mn.addActionListener(this);
     jeu.add(mn);
     //
-    JMenuItem Pause = new JMenuItem("Pause", KeyEvent.VK_P);
-    Pause.setActionCommand(ACTION_PAUSE);
-    Pause.addActionListener(this);  
-    jeu.add(Pause);
+    mn = new JMenuItem("pause", KeyEvent.VK_P);
+    mn.setActionCommand(ACTION_PAUSE);
+    // l'instance de cette fenêtre est à l'écoute d'une action sur ce menu
+    mn.addActionListener(this);
+    jeu.add(mn); 
     
     menuBar.add(jeu);
     
@@ -146,18 +147,7 @@ public class FenetreMain extends JFrame implements ActionListener {
       JOptionPane.showMessageDialog(null, erreurs);
   }
   
-  private void pause () {
-	  List<Bidule> bidulesPresent = new ArrayList<Bidule>();
-	  
-	  	for (Component obj : this.getContentPane().getComponents()) {
-	  		if (obj instanceof Bidule && obj != this)
-	  			
-	  			bidulesPresent.add((Bidule) obj);
-	  	}
-	  	for (Bidule bidules : bidulesPresent){
-	  		bidules.stop();
-	  	}
-  }
+  
   /*private void restart () {
 	  List<Bidule> bidulesPresent = new ArrayList<Bidule>();
 	  
@@ -182,8 +172,16 @@ public class FenetreMain extends JFrame implements ActionListener {
     } else if (action.equals(ACTION_GO)) {
       go();
     } else if (action.equals(ACTION_PAUSE)) {
-        pause();
-    }
+    	     pause();
+    	   }
+    	      }
+    	      private void pause() {
+    	   System.out.println("nb compos : " +this.getContentPane().getComponentCount());
+    	   for (Component obj : this.getContentPane().getComponents()) {
+    	     if (obj instanceof Bidule) {
+    	       Bidule b = (Bidule) obj;
+    	       b.stop();
+         } 
   }
-
+    	      }
 }// FentreMain

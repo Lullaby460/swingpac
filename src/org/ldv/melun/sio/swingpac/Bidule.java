@@ -72,6 +72,14 @@ public class Bidule extends JPanel {
    * dimension minimale considérant un bidule en vie
    */
   final int NB_MINMAL_PIXELS_VIE = 3;
+  
+  /**
+   * Compte le nombre de fois que this touche un autre bidule,
+   * sans être touché lui-même
+   */
+  private int nbTouches;
+
+ 
 
   /**
    * Déclaration du Template/Hook
@@ -88,7 +96,8 @@ public class Bidule extends JPanel {
       setLocation(getX() + incX, getY() + incY);
       stayOnStage();
       manageCollisions();
-      testWiner();
+      if (Bidule.this.getParent() != null)
+    	  testWiner();
     }
   }
 
@@ -173,26 +182,26 @@ public class Bidule extends JPanel {
    */
   private void manageCollisions() {
     // ai-je touché d'autres bidules ?
-    List<Bidule> bidules = getCollisions();
+	List<Bidule> bidules = this.getCollisions();
     for (Bidule bidule : bidules) {
       if (bidule.isGoDown()
           && bidule.getY() + bidule.getHeight() >= this.getY()){
-        bidule.tuEstouchePar(this);
+    	  this.tuEstouchePar(bidule);
       	compteur++;
       }
       else if (bidule.isGoUp()
           && bidule.getY() <= this.getY() + this.getHeight()){
-        bidule.tuEstouchePar(this);
+    	  this.tuEstouchePar(bidule);
         compteur++;
       }
       else if (bidule.isGoRight()
           && bidule.getX() + bidule.getWidth() >= this.getX()){
-        bidule.tuEstouchePar(this);
+    	  this.tuEstouchePar(bidule);
         compteur++;
       }
       else if (bidule.isGoLeft()
           && bidule.getX() <= this.getWidth() + this.getX()){
-        bidule.tuEstouchePar(this);
+    	  this.tuEstouchePar(bidule);
         compteur++;
       }
       if (compteur == 5) {
@@ -233,24 +242,37 @@ public class Bidule extends JPanel {
   /**
    * Appelé par un autre objet lorsqu'il me touche
    * 
-   * @param biduleImpacteur
+   * @param biduleQuiATouche
    *          l'objet qui vient de rentrer en collision avec moi
    */
-  public void tuEstouchePar(Bidule biduleImpacteur) {
+  public void tuEstouchePar(Bidule biduleQuiATouche) {
+	    nbTouches=0;
+	    biduleQuiATouche.aTouche();
+	    Bidule biduleQuiEstTouche = this; 
     // je retrécis
-    this.setBounds(getX() + incX, getY() + incY, getWidth() - 1,
+	    biduleQuiEstTouche.setBounds(getX() + incX, getY() + incY, getWidth() - 1,
         getHeight() - 1);
     
     // en dessous d'une dimension minimale, l'objet
     // courant disparait de ce monde...
-    if (getWidth() < NB_MINMAL_PIXELS_VIE || getHeight() < NB_MINMAL_PIXELS_VIE) {
+	   if (biduleQuiEstTouche.getWidth() < NB_MINMAL_PIXELS_VIE
+	    	     || biduleQuiEstTouche.getHeight() < NB_MINMAL_PIXELS_VIE) {
       // sucide...
-      this.stop();
-      System.out.println("Je meurs :-(   " + this.name);
-      getParent().remove(this);
-    }
-
-    doAfterImpactByOther();
+	   if (biduleQuiEstTouche.getParent() == null) return;
+	       biduleQuiEstTouche.stop();
+	       System.out.println("Je meurs :-(   " + biduleQuiEstTouche.name);
+	       biduleQuiEstTouche.getParent().remove(this);
+	     } else
+	       biduleQuiEstTouche.doAfterImpactByOther();
+	    } 
+  	   private void aTouche() {
+	     nbTouches++;    
+	     if (nbTouches >= 3 && this.getWidth()<10){
+	       this.setBounds(getX(), getY(),getWidth()+10, getHeight()+10);
+	       nbTouches=0;     
+	       System.out.println(name + " est augmenté");
+	    } 
+   
   }
 
   /**
