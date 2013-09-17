@@ -1,6 +1,8 @@
 package org.ldv.melun.sio.swingpac.etudiants;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 
 import org.ldv.melun.sio.swingpac.Bidule;
 
@@ -25,5 +27,11 @@ public class Tata extends Bidule {
       else
         goOnLeft();
   }
-
+  private Image image = null;
+  protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+	    image = getToolkit().getImage("images/xbox.jpg");
+	    if(image!=null)
+	    	g.drawImage(image, 0 ,0 ,getWidth(), getHeight(), this);
+  }
 }
