@@ -12,7 +12,6 @@ public class Tata extends Bidule {
     super("Warrio");
     setBackground(Color.MAGENTA);
     nbDeplacements = 0;
-    this.setSize(200, 200);
   }
 
   @Override
