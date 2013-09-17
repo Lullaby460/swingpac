@@ -29,6 +29,15 @@ import javax.swing.Timer;
  */
 public class Bidule extends JPanel {
 	
+	
+ @Override
+  public String toString() {
+    return "Bidule [incY=" + incY + ", incX=" + incX + ", name=" + name
+        + ", DELAY=" + DELAY 
+        + ", nbTouches=" + nbTouches + "]";
+  }
+ 
+	
   /**
   * Compteur de collisions
   */
